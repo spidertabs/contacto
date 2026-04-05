@@ -10,6 +10,14 @@
 
 ---
 
+## Screenshots
+
+| Login | Add Contact | Home |
+|:---:|:---:|:---:|
+| <img src="screenshots/login.jpg" width="200" alt="Login screen"/> | <img src="screenshots/add_contact.jpg" width="200" alt="Add contact screen"/> | <img src="screenshots/home.jpg" width="200" alt="Home screen"/> |
+
+---
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -19,7 +27,6 @@
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [Security](#security)
-- [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -146,16 +153,6 @@ Contacto is designed with a local-first, privacy-focused security model:
 - **No cloud sync** — Contact data never leaves the device.
 - **Biometric-only authentication** — The `local_auth` Flutter plugin interfaces with Android's `BiometricPrompt` API, ensuring fingerprint matching is handled entirely by the OS's secure enclave — Contacto never has access to raw fingerprint data.
 - **SQLite encryption** — *(Planned)* Future versions will encrypt the local database at rest using SQLCipher.
-
----
-
-## Screenshots
-
-| Login | Add Contact | Home |
-|:---:|:---:|:---:|
-| <img src="screenshots/login.jpg" width="200" alt="Login screen"/> | <img src="screenshots/add_contact.jpg" width="200" alt="Add contact screen"/> | <img src="screenshots/home.jpg" width="200" alt="Home screen"/> |
-
-> 📸 To add screenshots: take them on your device with the power + volume-down buttons, copy them to `screenshots/` in the project root, and name them `register.png`, `login.png`, and `contacts.png`.
 
 ---
 
