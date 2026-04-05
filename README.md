@@ -151,7 +151,7 @@ Contacto is designed with a local-first, privacy-focused security model:
 
 ## Screenshots
 
-| Registration | Login | Contact List |
+| Login | Add Contact | Home |
 |:---:|:---:|:---:|
 | <img src="screenshots/login.jpg" width="200" alt="Login screen"/> | <img src="screenshots/add_contact.jpg" width="200" alt="Add contact screen"/> | <img src="screenshots/home.jpg" width="200" alt="Home screen"/> |
 
