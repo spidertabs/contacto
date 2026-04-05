@@ -1,15 +1,15 @@
 // lib/data/database/database_helper.dart
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path/path.dart';
 import '../models/contact.dart';
 
 class DatabaseHelper {
-  // Singleton for production use
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
   DatabaseHelper._internal() : _testDb = null;
 
-  // Test constructor — accepts a pre-opened in-memory database
   DatabaseHelper.forTesting(Database testDb) : _testDb = testDb;
 
   final Database? _testDb;
@@ -23,6 +23,13 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDB() async {
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+      return await databaseFactory.openDatabase(
+        'contacto_web.db',
+        options: OpenDatabaseOptions(version: 1, onCreate: _onCreate),
+      );
+    }
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'contacto.db');
     return await openDatabase(path, version: 1, onCreate: _onCreate);
@@ -48,8 +55,6 @@ class DatabaseHelper {
     await db.insert('user', {'id': 1, 'registered': 0});
   }
 
-  // ── User / Registration ───────────────────────────────────────────────────
-
   Future<bool> isRegistered() async {
     final db = await database;
     final result = await db.query('user', where: 'id = ?', whereArgs: [1]);
@@ -62,8 +67,6 @@ class DatabaseHelper {
     await db.update('user', {'registered': 1},
         where: 'id = ?', whereArgs: [1]);
   }
-
-  // ── Contacts CRUD ─────────────────────────────────────────────────────────
 
   Future<int> insertContact(Contact contact) async {
     final db = await database;
@@ -101,16 +104,12 @@ class DatabaseHelper {
   }
 
   Future<void> closeDB() async {
-    if (_testDb != null) return; // Don't close injected test DBs
+    if (_testDb != null) return;
     final db = await database;
     await db.close();
     _db = null;
   }
 
-  // ── Testing helpers ───────────────────────────────────────────────────────
-
-  /// Resets the singleton DB reference between tests.
-  /// Call this in setUp() when using DatabaseHelper.forTesting().
   static void resetForTesting() {
     _db = null;
   }

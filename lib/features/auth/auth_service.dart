@@ -1,4 +1,5 @@
 // lib/features/auth/auth_service.dart
+import 'package:flutter/foundation.dart';
 import 'package:local_auth/local_auth.dart';
 import '../../data/database/database_helper.dart';
 
@@ -11,19 +12,24 @@ class AuthService {
   final DatabaseHelper _db = DatabaseHelper();
 
   /// Returns true if the device hardware supports biometrics.
+  /// Always returns false on web.
   Future<bool> isDeviceBiometricSupported() async {
+    if (kIsWeb) return false;
     return await _auth.isDeviceSupported();
   }
 
   /// Returns true if the user has at least one fingerprint enrolled.
+  /// Always returns false on web.
   Future<bool> isFingerprintEnrolled() async {
+    if (kIsWeb) return false;
     final enrolled = await _auth.getAvailableBiometrics();
     return enrolled.isNotEmpty;
   }
 
   /// Triggers the system biometric prompt.
-  /// Returns true on successful authentication.
+  /// On web, skips auth and returns true so the UI is accessible.
   Future<bool> authenticate({required String reason}) async {
+    if (kIsWeb) return true;
     try {
       return await _auth.authenticate(
         localizedReason: reason,
@@ -37,12 +43,10 @@ class AuthService {
     }
   }
 
-  /// Checks if the app has been registered (fingerprint setup completed).
   Future<bool> isAppRegistered() async {
     return await _db.isRegistered();
   }
 
-  /// Marks registration as complete in the local DB.
   Future<void> completeRegistration() async {
     await _db.setRegistered();
   }
